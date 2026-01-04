@@ -4,6 +4,7 @@ import { type Step } from "./how-it-works";
 function HowButton({ number, title, description }: Step) {
 	return (
 		<button
+			type="button"
 			className="group relative flex text-left gap-6 transition-opacity duration-300 "
 			style={{
 				gridColumn: 1,

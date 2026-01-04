@@ -1,0 +1,33 @@
+{
+  // Formateo automático al guardar
+  "editor.formatOnSave": true,
+
+  // Biome como formateador predeterminado
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+
+  // Acciones al guardar
+  "editor.codeActionsOnSave": {
+    // Ordena automáticamente los imports al guardar
+    "source.organizeImports.biome": "explicit",
+
+    // Aplica todas las correcciones seguras de linting (reemplaza al deprecated quickfix.biome)
+    "source.fixAll.biome": "explicit"
+  }
+}
