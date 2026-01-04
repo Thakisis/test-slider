@@ -14,7 +14,6 @@ function HowImage({
 			style={{
 				gridColumn: 2,
 				gridRow: "1 / -1",
-				gridArea: "1 / 2 / -1 / 3", // Forzar explícitamente el área
 			}}
 			data-step={number}
 		>
