@@ -21,13 +21,8 @@
   "[jsonc]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-
-  // Acciones al guardar
   "editor.codeActionsOnSave": {
-    // Ordena automáticamente los imports al guardar
     "source.organizeImports.biome": "explicit",
-
-    // Aplica todas las correcciones seguras de linting (reemplaza al deprecated quickfix.biome)
     "source.fixAll.biome": "explicit"
   }
 }

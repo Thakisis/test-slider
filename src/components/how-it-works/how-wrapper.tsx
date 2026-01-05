@@ -9,12 +9,14 @@ import {
   useRef,
   useState,
 } from "react";
+import { cn } from "@/lib/utils";
 
 interface HowWrapperProps {
   children: React.ReactNode;
   stepsCount: number;
   initialStep?: number;
   autoPlayInterval?: number;
+  images: React.ReactNode[];
 }
 
 function HowWrapper({
@@ -22,6 +24,7 @@ function HowWrapper({
   stepsCount,
   initialStep = 1,
   autoPlayInterval = 5000,
+  images,
 }: HowWrapperProps) {
   const [activeStep, setActiveStep] = useState(initialStep);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -35,7 +38,6 @@ function HowWrapper({
     }, autoPlayInterval);
   });
 
-  // Cada vez que cambie el paso activo (por clic o por timer), reiniciamos el autoplay
   useEffect(() => {
     startTimer();
     return () => {
@@ -43,7 +45,7 @@ function HowWrapper({
         clearTimeout(timerRef.current);
       }
     };
-  }, [startTimer]); // startTimer es estable gracias a useEffectEvent
+  }, [startTimer]);
 
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     const button = (e.target as HTMLElement).closest<HTMLButtonElement>(
@@ -56,16 +58,66 @@ function HowWrapper({
 
     if (newStep === activeStep) return;
     if (newStep < 1 || newStep > stepsCount) return;
-
     setActiveStep(newStep);
-    // → El useEffect anterior reiniciará el timer automáticamente
   };
 
-  const modifiedChildren = Children.map(children, (child) => {
+  const modifiedButtons = replaceButtons(
+    children as React.ReactNode[],
+    activeStep,
+  );
+  const modifiedImages = replaceImages(images as React.ReactNode[], activeStep);
+
+  return (
+    // biome-ignore lint(a11y/noStaticElementInteractions): Delegación de eventos segura – los elementos interactivos reales son <button data-step="..."> que son nativamente accesibles (focusables y activables con teclado). El contenedor solo captura burbujeo de clics.
+    <div
+      onClick={clickHandler}
+      className=" xl:grid   grid-cols-4 grid-rows-2 xl:grid-cols-2 xl:grid-rows-4  overflow-hidden "
+    >
+      <div className="mb-7 grid  col-span-3 xl:grid-col-span-2 xl:grid-rows-subgrid xl:row-span-full xl:col-start-1      xl:grid-cols-subgrid xl:grid-rows-none   xl:grid-cols-none  xl:grid-rows-subgrid xl:row-span-full xl:col-start-1 gap-4">
+        {modifiedButtons}
+      </div>
+      <div className="grid  xl:row-span-full xl:col-start-2 items-center">
+        {modifiedImages}
+      </div>
+    </div>
+  );
+}
+
+export default HowWrapper;
+
+function replaceImages(reactNodes: React.ReactNode[], activeStep: number) {
+  return Children.map(reactNodes, (child) => {
+    if (!isValidElement(child)) return child;
+    const props = child.props as Record<string, unknown>;
+    if (!props["data-step"]) return child;
+    const stepNumber =
+      typeof props["data-step"] === "number"
+        ? props["data-step"]
+        : Number(props["data-step"]);
+    const isActive = stepNumber === activeStep;
+    const originalClassName =
+      typeof props.className === "string" ? props.className : "";
+    return cloneElement(child, {
+      className: `${originalClassName} ${isActive ? "active" : ""}`.trim(),
+    } as { className: string });
+  });
+}
+function replaceButtons(reactNodes: React.ReactNode[], activeStep: number) {
+  const totalSteps = Children.count(reactNodes);
+
+  const classes = [
+    "translate-x-0   transition-all  xl:translate-x-[0%]", // 0: Activo
+    "translate-x-[100%] transition-all  xl:translate-x-[0%]", // 1: Asomando
+    "translate-x-[200%]   xl:translate-x-[0%]", // 2: Oculto derecha (sin animación)
+    "translate-x-[-100%] opacity-0 transition-all  xl:opacity-100 xl:translate-x-[0%]", // 3+: Oculto izquierda
+  ];
+
+  const zIndexes = [10, 5, 0, 0];
+
+  return Children.map(reactNodes, (child) => {
     if (!isValidElement(child)) return child;
 
     const props = child.props as Record<string, unknown>;
-
     if (!props["data-step"]) return child;
 
     const stepNumber =
@@ -77,24 +129,19 @@ function HowWrapper({
     const originalClassName =
       typeof props.className === "string" ? props.className : "";
 
+    const positionIndex = (stepNumber - activeStep + totalSteps) % totalSteps;
+    const classIndex = positionIndex <= 2 ? positionIndex : 3;
+
     return cloneElement(child, {
-      className: `${originalClassName} ${isActive ? "active" : ""}`.trim(),
-    } as { className: string });
+      className: cn(
+        originalClassName,
+        isActive && "active",
+        classes[classIndex],
+        "duration-1000",
+      ),
+      style: {
+        zIndex: zIndexes[classIndex],
+      },
+    } as { className: string; style: React.CSSProperties });
   });
-
-  return (
-    // biome-ignore lint(a11y/noStaticElementInteractions): Delegación de eventos segura – los elementos interactivos reales son <button data-step="..."> que son nativamente accesibles (focusables y activables con teclado). El contenedor solo captura burbujeo de clics.
-    <div
-      onClick={clickHandler}
-      className="grid grid-cols-2 items-center grid-rows-auto"
-      style={{
-        gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
-        gridTemplateRows: `repeat(4, minmax(0, 1fr))`,
-      }}
-    >
-      {modifiedChildren}
-    </div>
-  );
 }
-
-export default HowWrapper;
