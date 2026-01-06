@@ -11,7 +11,7 @@ function HowImage({
   return (
     <div
       className={cn(
-        "relative transition-opacity duration-700 ease-in-out aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border border-slate-200  [.active]:opacity-100 opacity-50",
+        "relative transition-opacity duration-700 ease-in-out aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border border-slate-200  [.active]:opacity-100 opacity-0",
         "col-span-full row-start-2  xl:col-start-2 xl:row-span-full",
       )}
       data-step={number}
