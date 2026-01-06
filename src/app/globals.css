@@ -45,13 +45,17 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
-  --animate-progress-bar: progress-bar 4s linear forwards;
 
+  --animate-progress-bar: progress-bar 4s linear forwards;
+  --animate-progress-mobile: progress-mobile 4s linear forwards;
 
   --animate-slide-in-center: slide-in-center 0.5s ease-in-out forwards;
   --animate-slide-in-peek: slide-in-peek 0.5s ease-in-out forwards;
   --animate-slide-out-left: slide-out-left 0.5s ease-in-out forwards;
+
+
 }
+
 
 /* De 100% a 0 (asomando → centro) */
 @keyframes slide-in-center {
@@ -97,6 +101,17 @@
     height: 100%;
   }
 }
+
+@keyframes progress-mobile {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
 
 :root {
   --background: oklch(1 0 0);

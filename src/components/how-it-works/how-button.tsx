@@ -8,25 +8,21 @@ function HowButton({ number, title, description }: Step) {
     "xl:row-start-3 xl:col-start-1 xl:col-end-1",
     "xl:row-start-4 xl:col-start-1 xl:col-end-1",
   ];
-  const cols = [
-    "col-start-1 max-w-[75%] row-start-1 row-end-1",
-    "col-start-1 max-w-[75%] row-start-1 row-end-1",
-    "col-start-1 max-w-[75%] row-start-1 row-end-1",
-  ];
 
   return (
     <button
       type="button"
       className={cn(
-        "group pl-4 relative flex text-left gap-6 transition-opacity duration-300   xl:max-w-none",
+        "group px-4 py-2 relative flex text-left gap-6 transition-opacity duration-300   xl:max-w-none",
         rows[number - 1],
-        "col-start-1 max-w-[75%] row-start-1  ",
+        "col-start-1  col-end-5 max-w-[75%] row-start-1  ",
       )}
       data-step={number}
+      data-type="button"
     >
       {/* Left indicator line with progress */}
-      <div className="absolute  left-0 top-0 h-full w-1 bg-slate-100 rounded-full overflow-hidden ">
-        <div className="w-full bg-primary transition-all duration-100 ease-linear group-[.active]:animate-progress-bar" />
+      <div className="absolute inset-x-2 h-1 left-0 bottom-0  xl:h-full xl:w-1 bg-slate-100 rounded-full overflow-hidden ">
+        <div className="h-full w-0 xl:h-0  xl:w-full bg-primary transition-all duration-100 ease-linear xl:group-[.active]:animate-progress-bar group-[.active]:animate-progress-mobile" />
       </div>
 
       {/* Content */}

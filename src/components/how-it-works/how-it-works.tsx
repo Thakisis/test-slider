@@ -52,8 +52,9 @@ export default function HowItWorks() {
       <HowHeader />
 
       <div className="w-full px-4 py-3 md:px-8 w-full ">
-        <HowWrapper stepsCount={STEPS.length} images={stepsImages}>
+        <HowWrapper stepsCount={STEPS.length}>
           {stepsButtons}
+          {stepsImages}
         </HowWrapper>
       </div>
     </section>

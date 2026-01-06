@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+import { cn } from "@/lib/utils";
 import type { Step } from "./how-it-works";
 
 function HowImage({
@@ -10,12 +10,12 @@ function HowImage({
 }: Step & { priority: boolean }) {
   return (
     <div
-      className="relative transition-opacity duration-700 ease-in-out aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border border-slate-200 col-start-2 [.active]:opacity-100 opacity-0"
-      style={{
-        gridColumn: "1 / -1",
-        gridRow: "1 / -1",
-      }}
+      className={cn(
+        "relative transition-opacity duration-700 ease-in-out aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl border border-slate-200  [.active]:opacity-100 opacity-50",
+        "col-span-full row-start-2  xl:col-start-2 xl:row-span-full",
+      )}
       data-step={number}
+      data-type="image"
     >
       <Image
         src={image || "/placeholder.svg"}
